@@ -44,7 +44,7 @@ class TMDBClient {
             case .logout:
                 return Endpoints.base + "/authentication/session" + Endpoints.apiKeyParam
             case .getFavorites:
-                return Endpoints.base + "/account/{account_id}/favorite/movies" + Endpoints.apiKeyParam + "&session_id=\(Auth.sessionId)"
+                return Endpoints.base + "/account/\(Auth.accountId)/favorite/movies" + Endpoints.apiKeyParam + "&session_id=\(Auth.sessionId)"
             }
         }
         
@@ -139,7 +139,9 @@ class TMDBClient {
             let decoder = JSONDecoder()
             do {
                 let responseObject = try decoder.decode(responseType.self, from: data)
-                completion(responseObject,nil)
+                DispatchQueue.main.async {
+                    completion(responseObject,nil)
+                }
             } catch {
                 completion(nil,error)
             }

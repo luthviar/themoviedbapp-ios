@@ -17,12 +17,14 @@ class FavoritesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.reloadData()
+        TMDBClient.getFavorites(completion: handleGetFavoritesResponse(movies:error:))
+        //tableView.reloadData()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -60,4 +62,11 @@ extension FavoritesViewController: UITableViewDataSource, UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    func handleGetFavoritesResponse(movies: [Movie], error: Error?) {
+        if let error = error {
+            print(error)
+        }
+        MovieModel.favorites = movies
+        tableView.reloadData()
+    }
 }
